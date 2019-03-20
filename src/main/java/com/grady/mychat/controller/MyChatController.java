@@ -1,35 +1,21 @@
 package com.grady.mychat.controller;
 
+import cn.hutool.core.lang.UUID;
 import com.alibaba.fastjson.JSONObject;
-import com.grady.mychat.button.WeChatMenu;
-import com.grady.mychat.common.msg.RestResponse;
-import com.grady.mychat.config.MenuConfig;
 import com.grady.mychat.config.WeChatConfig;
-import com.grady.mychat.exception.BaseException;
+import com.grady.mychat.model.JsapiSdk;
 import com.grady.mychat.model.WeiXinUser;
 import com.grady.mychat.service.TemplateMessageService;
 import com.grady.mychat.util.WeChatUtil;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.server.Session;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.reactive.function.BodyInserters;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.ui.Model;
 
 /**
  * @program: mychat
@@ -60,5 +46,19 @@ public class MyChatController {
             model.addAttribute("nickname", "未获取到用户信息！");
         }
         return "hello";
+    }
+
+    @GetMapping(value = "/jssdk")
+    public String Jssdk(Model model, HttpServletRequest request) {
+        HttpSession session=request.getSession();
+
+        JsapiSdk jsapiTicket = WeChatUtil.getJsapiTicket();
+
+        model.addAttribute("appid", WeChatConfig.appId);
+        model.addAttribute("timestamp", jsapiTicket.getTimestamp());
+        model.addAttribute("noncestr", jsapiTicket.getNoncestr());
+        model.addAttribute("url", jsapiTicket.getUrl());
+        model.addAttribute("signature", jsapiTicket.getSignature());
+        return "jssdk";
     }
 }

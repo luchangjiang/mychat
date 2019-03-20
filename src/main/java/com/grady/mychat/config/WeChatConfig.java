@@ -1,7 +1,7 @@
 package com.grady.mychat.config;
 
 import com.grady.mychat.model.AccessToken;
-import org.omg.CORBA.PUBLIC_MEMBER;
+import com.grady.mychat.model.JsapiSdk;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
@@ -24,6 +24,8 @@ public class WeChatConfig {
 
     //refresh by commandlinerunner and scheduler in WeChatRunner
     public static AccessToken accessToken;
+
+    public static JsapiSdk jsapiTicket;
 
     public static final String baseUrl="http://grady.pagekite.me";
 
@@ -49,6 +51,8 @@ public class WeChatConfig {
     public static final String SEND_TEMPLATE_MESSAGE="https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=ACCESS_TOKEN";
     //POST
     public static final String QR_CODE_TICKET_URL="https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=ACCESS_TOKEN";
+    //GET
+    public static final String JSAPI_TICKET_URL = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=ACCESS_TOKEN&type=jsapi";
     //GET
     public static final String QR_CODE_URL="https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=TICKET";
     //get

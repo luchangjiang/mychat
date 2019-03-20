@@ -1,9 +1,11 @@
 package com.grady.mychat.util;
 
+import cn.hutool.core.lang.UUID;
 import com.alibaba.fastjson.JSONObject;
 import com.grady.mychat.common.msg.RestResponse;
 import com.grady.mychat.config.WeChatConfig;
 import com.grady.mychat.model.AccessToken;
+import com.grady.mychat.model.JsapiSdk;
 import com.grady.mychat.model.WeiXinUser;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -55,6 +57,35 @@ public class WeChatUtil {
         RestResponse response = new RestResponse().rel(true);
         response.setData(JSONObject.parseObject(resp.block()));
         return response;
+    }
+    public static void refreshJsapiTicket(){
+        String uri = WeChatUtil.replaceAccessToken(WeChatConfig.JSAPI_TICKET_URL);
+
+        WebClient webClient = WebClient.create();
+        Mono<String> resp = webClient
+                .get().uri(uri)
+                .retrieve()
+                .bodyToMono(String.class);
+        JSONObject jsonObject = JSONObject.parseObject(resp.block());
+
+        System.out.println(jsonObject.toJSONString());
+        String ticket=jsonObject.getString("ticket");
+        String expireIn =jsonObject.getString("expires_in");
+        String timeStamp = String.valueOf(System.currentTimeMillis() / 1000);
+        String nonceStr = UUID.randomUUID().toString().replace("-", "").substring(0, 16);
+        String url = WeChatConfig.baseUrl + "/mychat/jssdk";
+        String signature =WeChatUtil.getSignature(ticket, nonceStr, timeStamp, url);
+
+        JsapiSdk jsapiTicket=new JsapiSdk(ticket, nonceStr, url, signature, expireIn);
+        System.out.println(jsapiTicket);
+        WeChatConfig.jsapiTicket = jsapiTicket;
+    }
+
+    public static JsapiSdk getJsapiTicket(){
+        if(WeChatConfig.jsapiTicket ==null||WeChatConfig.jsapiTicket.isExpired()){
+            refreshJsapiTicket();
+        }
+        return WeChatConfig.jsapiTicket;
     }
 
     public static String getUserByCode(String code){
@@ -125,6 +156,11 @@ public class WeChatUtil {
             e.printStackTrace();
         }
         return result;
+    }
+
+    public static String getSignature(String jsapi_ticket, String noncestr, String timestamp, String url){
+        String str = "jsapi_ticket="+jsapi_ticket+"&noncestr="+noncestr+"&timestamp="+timestamp+"&url="+url;
+        return sha1(str);
     }
 
     public static String replaceAccessToken(String uri){
