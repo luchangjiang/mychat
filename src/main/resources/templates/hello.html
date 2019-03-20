@@ -1,0 +1,18 @@
+
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>hello</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+</head>
+<body>
+<!--/*@thymesVar id="name" type="java.lang.String"*/-->
+<p th:text="'openid: ' + ${openid}"></p>
+<p th:text="'nickname: ' + ${nickname}"></p>
+<p th:text="'headimgurl: ' + ${headimgurl}"></p>
+<div align="center">
+    <img th:src="${headimgurl} " th:href="${headimgurl}" width="25%" height="25%"/>
+</div>
+</body>
+</html>
