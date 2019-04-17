@@ -1,4 +1,4 @@
-package com.grady.mychat.config;
+package com.grady.mychat.constant;
 
 import com.grady.mychat.model.AccessToken;
 import com.grady.mychat.model.JsapiSdk;
@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
  * @create: 2019-03-05 06:56
  **/
 @Configuration
-public class WeChatConfig {
+public class WeChatConstants {
     @Value("${wechat.token}")
     public static String token;
 

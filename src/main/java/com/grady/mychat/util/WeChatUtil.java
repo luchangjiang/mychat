@@ -3,7 +3,7 @@ package com.grady.mychat.util;
 import cn.hutool.core.lang.UUID;
 import com.alibaba.fastjson.JSONObject;
 import com.grady.mychat.common.msg.RestResponse;
-import com.grady.mychat.config.WeChatConfig;
+import com.grady.mychat.constant.WeChatConstants;
 import com.grady.mychat.model.AccessToken;
 import com.grady.mychat.model.JsapiSdk;
 import com.grady.mychat.model.WeiXinUser;
@@ -24,7 +24,7 @@ public class WeChatUtil {
     public static void refreshAccessToken(){
         WebClient webClient = WebClient.create();
         Mono<String> resp = webClient
-                .get().uri(WeChatConfig.getAccessTokenUrl())
+                .get().uri(WeChatConstants.getAccessTokenUrl())
                 .retrieve()
                 .bodyToMono(String.class);
         JSONObject jsonObject = JSONObject.parseObject(resp.block());
@@ -34,18 +34,18 @@ public class WeChatUtil {
         String expireIn =jsonObject.getString("expires_in");
         AccessToken accessToken=new AccessToken(token, expireIn);
         System.out.println(accessToken);
-        WeChatConfig.accessToken = accessToken;
+        WeChatConstants.accessToken = accessToken;
     }
 
     public static AccessToken getAccessToken(){
-        if(WeChatConfig.accessToken ==null||WeChatConfig.accessToken.isExpired()){
+        if(WeChatConstants.accessToken ==null|| WeChatConstants.accessToken.isExpired()){
             refreshAccessToken();
         }
-        return WeChatConfig.accessToken;
+        return WeChatConstants.accessToken;
     }
 
     public static RestResponse getQrCodeTicket(String message){
-        String uri = WeChatUtil.replaceAccessToken(WeChatConfig.QR_CODE_TICKET_URL);
+        String uri = WeChatUtil.replaceAccessToken(WeChatConstants.QR_CODE_TICKET_URL);
 
         Mono<String> resp= WebClient.create()
                 .post().uri(uri)
@@ -59,7 +59,7 @@ public class WeChatUtil {
         return response;
     }
     public static void refreshJsapiTicket(){
-        String uri = WeChatUtil.replaceAccessToken(WeChatConfig.JSAPI_TICKET_URL);
+        String uri = WeChatUtil.replaceAccessToken(WeChatConstants.JSAPI_TICKET_URL);
 
         WebClient webClient = WebClient.create();
         Mono<String> resp = webClient
@@ -73,24 +73,24 @@ public class WeChatUtil {
         String expireIn =jsonObject.getString("expires_in");
         String timeStamp = String.valueOf(System.currentTimeMillis() / 1000);
         String nonceStr = UUID.randomUUID().toString().replace("-", "").substring(0, 16);
-        String url = WeChatConfig.baseUrl + "/mychat/jssdk";
+        String url = WeChatConstants.baseUrl + "/mychat/jssdk";
         String signature =WeChatUtil.getSignature(ticket, nonceStr, timeStamp, url);
 
         JsapiSdk jsapiTicket=new JsapiSdk(ticket, nonceStr, url, signature, expireIn);
         System.out.println(jsapiTicket);
-        WeChatConfig.jsapiTicket = jsapiTicket;
+        WeChatConstants.jsapiTicket = jsapiTicket;
     }
 
     public static JsapiSdk getJsapiTicket(){
-        if(WeChatConfig.jsapiTicket ==null||WeChatConfig.jsapiTicket.isExpired()){
+        if(WeChatConstants.jsapiTicket ==null|| WeChatConstants.jsapiTicket.isExpired()){
             refreshJsapiTicket();
         }
-        return WeChatConfig.jsapiTicket;
+        return WeChatConstants.jsapiTicket;
     }
 
     public static String getUserByCode(String code){
-        String tokenUri=WeChatConfig.AUTH_ACCESS_TOKEN_URL.replace("APPID",WeChatConfig.appId)
-                .replace("SECRET",WeChatConfig.appSecret)
+        String tokenUri= WeChatConstants.AUTH_ACCESS_TOKEN_URL.replace("APPID", WeChatConstants.appId)
+                .replace("SECRET", WeChatConstants.appSecret)
                 .replace("CODE",code);
         String accessTokenObj = WebClient.create()
                 .get().uri(tokenUri)
@@ -102,7 +102,7 @@ public class WeChatUtil {
         String authToken=jsonObject.getString("access_token");
         String openid=jsonObject.getString("openid");
 
-        String userUri=WeChatConfig.AUTH_USER_INFO.replace("ACCESS_TOKEN",authToken)
+        String userUri= WeChatConstants.AUTH_USER_INFO.replace("ACCESS_TOKEN",authToken)
                 .replace("OPENID",openid);
         String user = WebClient.create()
                 .get().uri(userUri)
@@ -114,7 +114,7 @@ public class WeChatUtil {
     }
 
     public static WeiXinUser getUserInfo(String openId){
-        String uri = WeChatUtil.replaceAccessToken(WeChatConfig.USER_INFO_URL).replace("OPENID", openId);
+        String uri = WeChatUtil.replaceAccessToken(WeChatConstants.USER_INFO_URL).replace("OPENID", openId);
 
         WeiXinUser resp= WebClient.create()
                 .get().uri(uri)
@@ -127,7 +127,7 @@ public class WeChatUtil {
 
     public static Boolean checkSignagure(String timestamp, String nonce, String signature){
         //1）将token、timestamp、nonce三个参数进行字典序排序
-        String[] arr=new String[]{WeChatConfig.token, timestamp,nonce};
+        String[] arr=new String[]{WeChatConstants.token, timestamp,nonce};
         Arrays.sort(arr);
         //2）将三个参数字符串拼接成一个字符串进行sha1加密
         String plainText = arr[0]+arr[1]+arr[2];

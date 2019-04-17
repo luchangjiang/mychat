@@ -1,7 +1,8 @@
-package com.grady.mychat.config;
+package com.grady.mychat.util;
 
 import com.grady.mychat.button.*;
 import com.grady.mychat.button.buttontype.*;
+import com.grady.mychat.constant.WeChatConstants;
 
 /**
  * @program: mychat
@@ -9,14 +10,14 @@ import com.grady.mychat.button.buttontype.*;
  * @author: luchangjiang
  * @create: 2019-03-05 11:43
  **/
-public class MenuConfig {
+public class WxMenuUtil {
     public static WeChatMenu InitMenu(int menuType){
         WeChatMenu menu=new WeChatMenu();
         if(1==menuType){
-            menu = MenuConfig.InitMenu1();
+            menu = WxMenuUtil.InitMenu1();
         }
         else{
-            menu = MenuConfig.InitMenu2();
+            menu = WxMenuUtil.InitMenu2();
         }
         return menu;
     }
@@ -28,8 +29,8 @@ public class MenuConfig {
         menu.getButton().add(clickButton);
 
         BaseButton baseButton=new BaseButton("菜单");
-        baseButton.getSub_button().add(new ViewButton("Hello",WeChatConfig.baseUrl + "/mychat/hello"));
-        baseButton.getSub_button().add(new ViewButton("Jssdk",WeChatConfig.baseUrl + "/mychat/jssdk"));
+        baseButton.getSub_button().add(new ViewButton("Hello", WeChatConstants.baseUrl + "/mychat/hello"));
+        baseButton.getSub_button().add(new ViewButton("Jssdk", WeChatConstants.baseUrl + "/mychat/jssdk"));
 //        MiniProgramButton miniProgramButton=new MiniProgramButton("wxa","http://mp.weixin.qq.com",WeChatConfig.appId,"pages/lunar/index");
 //        baseButton.getSub_button().add(miniProgramButton);
         ClickButton clickButton2=new ClickButton("赞一下我们","V1001_GOOD");

@@ -1,6 +1,6 @@
 package com.grady.mychat.runner;
 
-import com.grady.mychat.config.WeChatConfig;
+import com.grady.mychat.constant.WeChatConstants;
 import com.grady.mychat.util.WeChatUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -34,6 +34,6 @@ public class WeChatRunner implements CommandLineRunner {
         WeChatUtil.refreshAccessToken();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        log.info("刷新accessToekn值：{}，刷新时间：{}",WeChatConfig.accessToken, df.format(new Date()));
+        log.info("刷新accessToekn值：{}，刷新时间：{}", WeChatConstants.accessToken, df.format(new Date()));
     }
 }

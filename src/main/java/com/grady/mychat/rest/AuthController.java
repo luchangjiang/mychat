@@ -3,8 +3,8 @@ package com.grady.mychat.rest;
 import com.alibaba.fastjson.JSONObject;
 import com.grady.mychat.button.WeChatMenu;
 import com.grady.mychat.common.msg.RestResponse;
-import com.grady.mychat.config.MenuConfig;
-import com.grady.mychat.config.WeChatConfig;
+import com.grady.mychat.util.WxMenuUtil;
+import com.grady.mychat.constant.WeChatConstants;
 import com.grady.mychat.exception.BaseException;
 import com.grady.mychat.model.WeiXinUser;
 import com.grady.mychat.service.TemplateMessageService;
@@ -39,9 +39,9 @@ public class AuthController {
     @PostMapping("/createMenu/{menuType}")
     @ApiOperation(value="创建微信菜单", notes="在微信公众号创建程序菜单")
     public RestResponse CreateMenu(@PathVariable int menuType){
-        String uri = WeChatConfig.CREATE_MENU_URL.replace("ACCESS_TOKEN", WeChatUtil.getAccessToken().getAccessToken());
+        String uri = WeChatConstants.CREATE_MENU_URL.replace("ACCESS_TOKEN", WeChatUtil.getAccessToken().getAccessToken());
 
-        WeChatMenu menu= MenuConfig.InitMenu(menuType);
+        WeChatMenu menu= WxMenuUtil.InitMenu(menuType);
         Object json = JSONObject.toJSON(menu);
 
         Mono<String> resp = WebClient.create()
@@ -101,7 +101,7 @@ public class AuthController {
     @ApiOperation(value="获取二维码", notes="重定向到二维码")
     public void getQrCode(@PathVariable String ticket, HttpServletResponse response){
         try {
-            response.sendRedirect(WeChatConfig.QR_CODE_URL.replace("TICKET", ticket));
+            response.sendRedirect(WeChatConstants.QR_CODE_URL.replace("TICKET", ticket));
         }catch (IOException e){
             throw new BaseException("重定向失败");
         }
