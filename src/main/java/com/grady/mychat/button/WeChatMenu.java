@@ -14,7 +14,4 @@ import java.util.List;
 @Data
 public class WeChatMenu {
     private List<BaseButton> button= new ArrayList<BaseButton>();
-
-    public WeChatMenu() {
-    }
 }

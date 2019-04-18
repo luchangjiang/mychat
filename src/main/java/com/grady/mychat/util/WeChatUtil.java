@@ -6,7 +6,9 @@ import com.grady.mychat.common.msg.RestResponse;
 import com.grady.mychat.constant.WeChatConstants;
 import com.grady.mychat.model.AccessToken;
 import com.grady.mychat.model.JsapiSdk;
+import com.grady.mychat.model.WechatSettings;
 import com.grady.mychat.model.WeiXinUser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -73,7 +75,7 @@ public class WeChatUtil {
         String expireIn =jsonObject.getString("expires_in");
         String timeStamp = String.valueOf(System.currentTimeMillis() / 1000);
         String nonceStr = UUID.randomUUID().toString().replace("-", "").substring(0, 16);
-        String url = WeChatConstants.baseUrl + "/mychat/jssdk";
+        String url = WeChatConstants.BASE_URL + "/mychat/jssdk";
         String signature =WeChatUtil.getSignature(ticket, nonceStr, timeStamp, url);
 
         JsapiSdk jsapiTicket=new JsapiSdk(ticket, nonceStr, url, signature, expireIn);
@@ -89,8 +91,8 @@ public class WeChatUtil {
     }
 
     public static String getUserByCode(String code){
-        String tokenUri= WeChatConstants.AUTH_ACCESS_TOKEN_URL.replace("APPID", WeChatConstants.appId)
-                .replace("SECRET", WeChatConstants.appSecret)
+        String tokenUri= WeChatConstants.AUTH_ACCESS_TOKEN_URL.replace("APPID", WechatSettings.appId)
+                .replace("SECRET", WechatSettings.appSecret)
                 .replace("CODE",code);
         String accessTokenObj = WebClient.create()
                 .get().uri(tokenUri)
@@ -127,7 +129,7 @@ public class WeChatUtil {
 
     public static Boolean checkSignagure(String timestamp, String nonce, String signature){
         //1）将token、timestamp、nonce三个参数进行字典序排序
-        String[] arr=new String[]{WeChatConstants.token, timestamp,nonce};
+        String[] arr=new String[]{WechatSettings.appToken, timestamp,nonce};
         Arrays.sort(arr);
         //2）将三个参数字符串拼接成一个字符串进行sha1加密
         String plainText = arr[0]+arr[1]+arr[2];

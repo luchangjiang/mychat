@@ -8,6 +8,7 @@ package com.grady.mychat.Interceptor;
  **/
 import com.alibaba.fastjson.JSONObject;
 import com.grady.mychat.constant.WeChatConstants;
+import com.grady.mychat.model.WechatSettings;
 import com.grady.mychat.util.WeChatUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -44,7 +45,7 @@ public class WxRequestInterceptor implements HandlerInterceptor {
         String code = request.getParameter("code");
         // 第一次访问
         if (StringUtils.isBlank(code)) {
-            String uri= WeChatConstants.AUTH_CODE_URL.replace("APPID", WeChatConstants.appId)
+            String uri= WeChatConstants.AUTH_CODE_URL.replace("APPID", WechatSettings.appId)
                     .replace("REDIRECT_URI", URLEncoder.encode(backURL, "UTF-8"))
                     .replace("SCOPE","snsapi_userinfo");
             response.sendRedirect(uri);

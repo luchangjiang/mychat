@@ -3,6 +3,7 @@ package com.grady.mychat.util;
 import com.grady.mychat.constant.WeChatConstants;
 import com.grady.mychat.message.*;
 import com.grady.mychat.message.bean.Article;
+import com.grady.mychat.model.WechatSettings;
 import com.thoughtworks.xstream.XStream;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -55,8 +56,8 @@ public class MessageUtil {
                     baseMessage = new ArticleMessage(map, articles);
                 }
                 else if("登录".equalsIgnoreCase(map.get("Content").toString())){
-                    String uri= WeChatConstants.AUTH_CODE_URL.replace("APPID", WeChatConstants.appId)
-                            .replace("REDIRECT_URI", WeChatConstants.baseUrl + "/auth/uncoCallback")
+                    String uri= WeChatConstants.AUTH_CODE_URL.replace("APPID", WechatSettings.appId)
+                            .replace("REDIRECT_URI", WeChatConstants.BASE_URL + "/auth/uncoCallback")
                             .replace("SCOPE","snsapi_userinfo");
                     baseMessage = new TextMessage(map, "请点击<a href=\""+ uri +"\">这里</a>登录！");
                 }

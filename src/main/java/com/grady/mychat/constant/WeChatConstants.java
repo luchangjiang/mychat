@@ -4,6 +4,7 @@ import com.grady.mychat.model.AccessToken;
 import com.grady.mychat.model.JsapiSdk;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 /**
  * @program: mychat
@@ -11,23 +12,14 @@ import org.springframework.context.annotation.Configuration;
  * @author: luchangjiang
  * @create: 2019-03-05 06:56
  **/
-@Configuration
+@Component
 public class WeChatConstants {
-    @Value("${wechat.token}")
-    public static String token;
-
-//    @Value("${wechat.appid:wx7e2bdb52e162650c}")
-    public static final String appId="wx7e2bdb52e162650c";
-
-//    @Value("${wechat.appsecret:ad8e1a566b94b330774be5ffbeb9ee19}")
-    public static final String appSecret="ad8e1a566b94b330774be5ffbeb9ee19";
-
     //refresh by commandlinerunner and scheduler in WeChatRunner
     public static AccessToken accessToken;
 
     public static JsapiSdk jsapiTicket;
 
-    public static final String baseUrl="http://grady.pagekite.me";
+    public static final String BASE_URL ="http://riverlu.pagekite.me";
 
     public static final String ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
 

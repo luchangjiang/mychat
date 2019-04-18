@@ -3,6 +3,7 @@ package com.grady.mychat.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.grady.mychat.constant.WeChatConstants;
 import com.grady.mychat.model.JsapiSdk;
+import com.grady.mychat.model.WechatSettings;
 import com.grady.mychat.model.WeiXinUser;
 import com.grady.mychat.service.TemplateMessageService;
 import com.grady.mychat.util.WeChatUtil;
@@ -53,7 +54,7 @@ public class MyChatController {
 
         JsapiSdk jsapiTicket = WeChatUtil.getJsapiTicket();
 
-        model.addAttribute("appid", WeChatConstants.appId);
+        model.addAttribute("appid", WechatSettings.appId);
         model.addAttribute("timestamp", jsapiTicket.getTimestamp());
         model.addAttribute("noncestr", jsapiTicket.getNoncestr());
         model.addAttribute("url", jsapiTicket.getUrl());

@@ -29,8 +29,8 @@ public class WxMenuUtil {
         menu.getButton().add(clickButton);
 
         BaseButton baseButton=new BaseButton("菜单");
-        baseButton.getSub_button().add(new ViewButton("Hello", WeChatConstants.baseUrl + "/mychat/hello"));
-        baseButton.getSub_button().add(new ViewButton("Jssdk", WeChatConstants.baseUrl + "/mychat/jssdk"));
+        baseButton.getSub_button().add(new ViewButton("Hello", WeChatConstants.BASE_URL + "/mychat/hello"));
+        baseButton.getSub_button().add(new ViewButton("Jssdk", WeChatConstants.BASE_URL + "/mychat/jssdk"));
 //        MiniProgramButton miniProgramButton=new MiniProgramButton("wxa","http://mp.weixin.qq.com",WeChatConfig.appId,"pages/lunar/index");
 //        baseButton.getSub_button().add(miniProgramButton);
         ClickButton clickButton2=new ClickButton("赞一下我们","V1001_GOOD");
